@@ -18,7 +18,7 @@
             color: #333;
             line-height: 1.8;
             font-size: 16px;
-        /* bg2.png 绝对路径 */
+            /* bg2.png 绝对路径 */
             background: url("https://i.ibb.co/Ld5SH4yJ/bg2.png") no-repeat center center;
             background-size: cover;
             background-attachment: fixed;
@@ -88,13 +88,6 @@
             position: relative;
             z-index: 1;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .submit-form.show {
-            display: block;
-        }
-        .submit-form h2 {
-            margin-bottom: 15px;
-            margin-top: 0;
         }
 
         /* 通用表单样式 */
@@ -331,7 +324,7 @@
         <div class="callsign-item">BI4PUM</div>
     </div>
 
-    <!-- 提交表单 -->
+    <!-- 用户提交表单区域 -->
     <div class="submit-form">
         <h2>提交活跃电台 | Submit Active Station</h2>
         <div class="form-group">
@@ -354,9 +347,9 @@
         <div id="submit-message" class="message"></div>
     </div>
 
-    <!-- 用户提交数据渲染区域 -->
-    <h2 id="submittedTitle" style="display:none;">用户提交活跃电台</h2>
-    <div id="stationContainer" class="two-col-grid"></div>
+    <h2 id="submittedTitle" style="display:none;">用户提交记录 | User Submissions</h2>
+    <div class="two-col-grid" id="stationContainer"></div>
+    <button id="clearBtn" class="clear-btn" onclick="clearMyStations()">清空我的提交 | Clear My Submissions</button>
 
     <!-- 说明文本 -->
     <div class="note">
@@ -370,120 +363,7 @@
         © 2026 WATM 通联泰安全模式奖 BG4LZN | 联系邮箱：<a href="mailto:watmham@outlook.com">watmham@outlook.com</a>
     </div>
 
-    <!-- 核心功能JS jsonbin -->
-    <script>
-        const BIN_ID = "6a803e6bda38895dfee7eddc";
-        const API_KEY = "$2a$10$j7aOzUZ.sLs7zzuQEIUVxuCb3d.B/BLJ/uWnkcMrrTP/cEIZpwCgW";
-
-
-        const submitBtn = document.getElementById("submitBtn");
-        const msgEl = document.getElementById("submit-message");
-        const container = document.getElementById("stationContainer");
-        const submittedTitle = document.getElementById("submittedTitle");
-
-        //加载云端数据渲染页面
-        async function loadStations(){
-            try{
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
-                    headers:{"X-Master-Key":API_KEY}
-                });
-                const json = await res.json();
-                const arr = json.record.list || [];
-
-                container.innerHTML = "";
-                if(arr.length > 0){
-                    submittedTitle.style.display = "block";
-                    arr.forEach(station=>{
-                        const item = document.createElement('div');
-                        item.className = 'station-item';
-                        item.innerHTML = `
-                            <strong>${station.callsign}</strong>
-                            <div class="info">位置：${station.location}</div>
-                            <div class="info">模式：${station.modes}</div>
-                            <div class="info">备注：${station.notes}</div>
-                            <span class="time">提交时间：${station.time}</span>
-                        `;
-                        container.appendChild(item);
-                    })
-                }else{
-                    submittedTitle.style.display = "none";
-                }
-            }catch(err){
-                console.error("读取失败",err);
-                showMessage(msgEl,"❌读取云端数据失败","error");
-            }
-        }
-
-        //提交按钮点击事件
-        submitBtn.onclick = async function(){
-            const callsign = document.getElementById('callsign').value.trim();
-            const location = document.getElementById('location').value.trim() || "泰安市（未指定具体区域）";
-            const modes = document.getElementById('modes').value.trim() || "未填写";
-            const notes = document.getElementById('notes').value.trim() || "无";
-            msgEl.style.display = "none";
-
-            if(!callsign){
-                showMessage(msgEl,"请填写电台呼号！| Please fill in call sign!","error");
-                return;
-            }
-            if(!API_KEY){
-                showMessage(msgEl,"请填写API_KEY！","error");
-                return;
-            }
-
-            const newStation = {
-                callsign:callsign,
-                location:location,
-                modes:modes,
-                notes:notes,
-                time:new Date().toLocaleString('zh‑CN')
-            };
-
-            try{
-                //读取旧数据
-                const getRes = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
-                    headers:{"X‑Master‑Key":API_KEY}
-                });
-                const getJson = await getRes.json();
-                let data = getJson.record.list || [];
-
-                data.unshift(newStation);
-                if(data.length>100) data = data.slice(0,100);
-
-                //写回jsonbin
-                const putResp = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
-                    method:"PUT",
-                    headers:{
-                        "X‑Master‑Key":API_KEY,
-                        "Content‑Type":"application/json"
-                    },
-                    body:JSON.stringify({"list":data})
-                })
-
-                if(putResp.ok){
-                    showMessage(msgEl,"✅提交成功！| Submit Success!","success");
-                    //清空输入框
-                    document.getElementById('callsign').value = "";
-                    document.getElementById('location').value = "";
-                    document.getElementById('modes').value = "";
-                    document.getElementById('notes').value = "";
-                    await loadStations();
-                }else{
-                    showMessage(msgEl,"❌提交到云端失败","error");
-                }
-            }catch(err){
-                console.error(err);
-                showMessage(msgEl,"❌网络请求出错","error");
-            }
-        }
-
-        function showMessage(element, text, type) {
-            element.textContent = text;
-            element.className = `message ${type}`;
-        }
-
-        //页面打开自动加载
-        window.addEventListener("DOMContentLoaded",loadStations);
+    
     </script>
 </body>
 </html>

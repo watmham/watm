@@ -1,229 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泰安发射电台 | Tai'an Active Stations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif;
+        }
+        body {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            color: #333;
+            line-height: 1.8;
+            font-size: 16px;
+            /* bg2.png 绝对路径 */
+            background: url("https://i.ibb.co/Ld5SH4yJ/bg2.png") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: #f8f8f8;
+            position: relative;
+            z-index: 0;
+        }
 
-<html lang="zh-CN"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>泰安发射电台 | Tai'an Active Stations</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif; } body { max-width: 1000px; margin: 0 auto; padding: 40px 20px; color: #333; line-height: 1.8; font-size: 16px; /* bg2.png 绝对路径 */ background: url("https://i.ibb.co/Ld5SH4yJ/bg2.png") no-repeat center center; background-size: cover; background-attachment: fixed; background-color: #f8f8f8; position: relative; z-index: 0; }
-/* 半透明遮罩，保证文字清晰 */
-body::before {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba (255, 255, 255, 0.85);
-z-index: -1;
-}
-.back {
-margin-bottom: 20px;
-display: inline-block;
-color: #0066cc;
-text-decoration: none;
-position: relative;
-z-index: 1;
-}
-.back:hover {
-text-decoration: underline;
-}
-h1 {
-font-size: 24px;
-text-align: center;
-margin-bottom: 30px;
-padding-bottom: 10px;
-border-bottom: 1px solid #666;
-color: #2c3e50;
-position: relative;
-z-index: 1;
-}
-h1 .en {
-font-size: 20px;
-display: block;
-margin-top: 5px;
-font-weight: normal;
-color: #666;
-}
-/* 统一 h2 样式 /
-h2 {
-font-size: 20px;
-margin: 30px 0 15px;
-color: #2c3e50;
-text-align: center;
-position: relative;
-z-index: 1;
-}
-/ 提交表单样式 */
-.submit-form {
-background: rgba (255,255,255,0.9);
-padding: 20px;
-border-radius: 8px;
-border: 1px solid #ddd;
-margin-bottom: 30px;
-position: relative;
-z-index: 1;
-box-shadow: 0 2px 6px rgba (0,0,0,0.1);
-}
-.submit-form.show {
-display: block;
-}
-.submit-form h2 {
-margin-bottom: 15px;
-margin-top: 0;
-}
-/* 通用表单样式 */
-.form-group {
-margin-bottom: 12px;
-}
-.form-group label {
-display: block;
-margin-bottom: 5px;
-font-weight: bold;
-color: #333;
-}
-.form-group input, .form-group textarea {
-width: 100%;
-padding: 8px 10px;
-border: 1px solid #ccc;
-border-radius: 4px;
-font-size: 16px;
-resize: vertical;
-}
-.form-group input:focus, .form-group textarea:focus {
-outline: none;
-border-color: #3498db;
-box-shadow: 0 0 3px rgba (52, 152, 219, 0.3);
-}
-/* 通用按钮样式 */
-.btn {
-display: block;
-width: 100%;
-padding: 10px;
-border: none;
-border-radius: 4px;
-font-size: 16px;
-cursor: pointer;
-transition: background 0.3s ease;
-color: #fff;
-}
-.btn-primary {
-background: #3498db;
-}
-.btn-primary:hover {
-background: #2980b9;
-}
-.btn-danger {
-background: #e74c3c;
-}
-.btn-danger:hover {
-background: #c0392b;
-}
-/* 提示消息 */
-.message {
-margin-top: 10px;
-padding: 8px;
-border-radius: 4px;
-text-align: center;
-display: none;
-}
-.success {
-background: #d4edda;
-color: #155724;
-border: 1px solid #c3e6cb;
-display: block;
-}
-.error {
-background: #f8d7da;
-color: #721c24;
-border: 1px solid #f5c6cb;
-display: block;
-}
-/* 核心：自动两列布局（适配所有列表） /
-.two-col-grid {
-display: grid;
-grid-template-columns: repeat(2, 1fr); / 固定两列 /
-gap: 10px; / 列 / 行间距 /
-position: relative;
-z-index: 1;
-margin: 0 auto;
-max-width: 800px; / 限制最大宽度，更美观 */
-}
-/* 用户提交的电台项样式 */
-.station-item {
-background: rgba (255,255,255,0.7);
-padding: 15px;
-border-radius: 8px;
-border: 1px solid #ddd;
-transition: transform 0.2s ease;
-}
-.station-item:hover {
-transform: translateY (-2px);
-box-shadow: 0 2px 4px rgba (0,0,0,0.1);
-}
-.station-item strong {
-font-size: 18px;
-color: #222;
-display: block;
-margin-bottom: 5px;
-}
-.station-item .info {
-color: #555;
-margin-bottom: 5px;
-}
-.station-item .time {
-font-size: 12px;
-color: #999;
-text-align: right;
-display: block;
-}
-.station-item .owner {
-font-size: 12px;
-color: #666;
-margin-top: 5px;
-}
-/* 静态呼号项样式 */
-.callsign-item {
-background: rgba (255,255,255,0.7);
-padding: 8px 15px;
-border-radius: 20px;
-border: 1px solid #ddd;
-text-align: center;
-}
-/* 清空按钮（仅登录用户可见，且只能清空自己的） /
-.clear-btn {
-margin: 20px auto 0;
-display: none; / 默认隐藏 /
-padding: 8px 20px;
-background: #e74c3c;
-color: #fff;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-size: 16px;
-}
-.clear-btn.show {
-display: block; / 有数据时显示 */
-}
-.clear-btn:hover {
-background: #c0392b;
-}
-/* 说明文本样式 */
-.note {
-text-align: center;
-margin: 20px 0 30px;
-font-size: 14px;
-color: #666;
-position: relative;
-z-index: 1;
-}
-.copyright {
-text-align: center;
-margin-top: 50px;
-font-size: 14px;
-color: #666;
-position: relative;
-z-index: 1;
-}
-/* 手机端适配：小屏幕自动变回一列 /
-@media (max-width: 600px) {
-.two-col-grid {
-grid-template-columns: 1fr; / 手机端一列 */
-}
-}
-</style>
-</head> <body> <!-- 返回主页按钮 --> <a href="../" class="back">← 返回主页 | Back to Home</a> <h1> 最近泰安有发射的电台 <span class="en">Recently Active Stations in Tai'an</span> </h1> <h2>泰安在册电台呼号 | Registered Station Call Signs in Tai'an</h2> <div class="two-col-grid"> <div class="callsign-item">BA4IHB</div> <div class="callsign-item">BA4III</div> <div class="callsign-item">BA4JAE</div> <div class="callsign-item">BA4JBN</div> <div class="callsign-item">BA4JBU</div> <div class="callsign-item">BA4JFO</div> <div class="callsing-item">BA4JFT</div> <div class="callsing-item">BA4JFV</div> <div class="callsign-item">BA4JGU</div> <div class="callsing-item">BA4JIF</div> <div class="callsing-item">BA4JNU</div> <div class="callsign-item">BA4JUN</div> <div class="callsing-item">BA4KJA</div> <div class="callsign-item">BA4KNP</div> <div class="callsign-item">BA4KNR</div> <div class="callsing-item">BA4KOK</div> <div class="callsing-item">BA4KVQ</div> <div class="callsing-item">BA4KYT</div> <div class="callsign-item">BD4JK</div> <div class="callsign-item">BD4LG</div> <div class="callsign-item">BD4NW</div> <div class="callsign-item">BG4JPO</div> <div class="callsign-item">BG4JUR</div> <div class="callsign-item">BG4JUS</div> <div class="callsign-item">BG4JUT</div> <div class="callsign-item">BG4JUV</div> <div class="callsign-item">BG4JUW</div> <div class="callsign-item">BG4LZM</div> <div class="callsign-item">BG4LZN</div> <div class="callsign-item">BG4LZO</div> <div class="callsign-item">BG4LZT</div> <div class="callsign-item">BG4LZV</div> <div class="callsing-item">BG4LZW</div> <div class="callsing-item">BG4LZY</div> <div class="callsign-item">BH4OBW</div> <div class="callsing-item">BH4PXX</div> <div class="callsing-item">BH4PZY</div> <div class="callsign-item">BI4IWX</div> <div class="callsign-item">BI4IXA</div> <div class="callsign-item">BI4JKW</div> <div class="callsign-item">BI4JWG</div> <div class="callsign-item">BI4LHS</div> <div class="callsign-item">BI4LQH</div> <div class="callsing-item">BI4MBB</div> <div class="callsing-item">BI4MCD</div> <div class="callsing-item">BI4MCX</div> <div class="callsign-item">BI4MPY</div> <div class="callsign-item">BI4NCA</div> <div class="callsing-item">BI4NDA</div> <div class="callsign-item">BI4PID</div> <div class="callsign-item">BI4PIH</div> <div class="callsign-item">BI4PUM</div> </div> <div class="note"> <p>注：列表实时更新，包含近期在泰安地区有发射记录的业余电台呼号，如有遗漏请发送电子邮件至watmham@outlook.com</p> <p>最新更新日期：2026年8月15日</p> <p class="en">Note: This list is updated in real time, including call signs of amateur stations with recent transmission records in Tai'an</p> </div> <div class="copyright"> © 2026 WATM 通联泰安全模式奖 BG4LZN | 联系邮箱：<a href="mailto:watmham@outlook.com">watmham@outlook.com</a> </div> <script> const callsign = document.getElementById('callsign').value.trim(); const location = document.getElementById('location').value.trim() || "泰安市（未指定具体区域）"; const modes = document.getElementById('modes').value.trim() || "未填写"; const notes = document.getElementById('notes').value.trim() || "无"; const submitMessage = document.getElementById('submit-message'); // 验证必填项 if (!callsign) { showMessage(submitMessage, "请填写电台呼号！| Please fill in call sign!", "error"); return; } // 创建电台对象（关联提交用户） const station = { callsign: callsign, location: location, modes: modes, notes: notes, time: new Date().toLocaleString('zh-CN'), owner: currentUser // 关键：记录提交者 }; // 读取现有电台 let stations = JSON.parse(localStorage.getItem('watmStations')) || []; stations.unshift(station); localStorage.setItem('watmStations', JSON.stringify(stations)); // 清空表单+提示+刷新列表 document.getElementById('callsign').value = ""; document.getElementById('location').value = ""; document.getElementById('modes').value = ""; document.getElementById('notes').value = ""; showMessage(submitMessage, "提交成功！| Submit Success!", "success"); loadStations(); // 3秒后隐藏提示 setTimeout(() => submitMessage.style.display = "none", 3000); } // 加载电台列表（显示所有用户提交的，但清空按钮仅清空自己的） function loadStations() { const stations = JSON.parse(localStorage.getItem('watmStations')) || []; const container = document.getElementById('stationContainer'); const submittedTitle = document.getElementById('submittedTitle'); const clearBtn = document.getElementById('clearBtn'); // 清空容器 container.innerHTML = ""; // 有提交数据时显示 if (stations.length > 0) { submittedTitle.style.display = "block"; // 登录用户且有自己的提交时显示清空按钮 if (currentUser && stations.some(s => s.owner === currentUser)) { clearBtn.classList.add("show"); } else { clearBtn.classList.remove("show"); } // 显示所有提交的电台 stations.forEach(station => { const item = document.createElement('div'); item.className = 'station-item'; item.innerHTML = ` <strong>${station.callsign}</strong> <div class="info">位置：${station.location}</div> <div class="info">模式：${station.modes}</div> <div class="info">备注：${station.notes}</div> <span class="time">提交时间：${station.time}</span> <div class="owner">提交者：${station.owner}</div> `; container.appendChild(item); }); } else { // 无数据时隐藏 submittedTitle.style.display = "none"; clearBtn.classList.remove("show"); } } // 清空自己提交的电台（仅能清空自己的） function clearMyStations() { if (!currentUser) return; if (confirm("确定清空你提交的所有电台信息吗？| Are you sure to clear your submissions?")) { let stations = JSON.parse(localStorage.getItem('watmStations')) || []; // 过滤掉当前用户的提交 stations = stations.filter(station => station.owner !== currentUser); localStorage.setItem('watmStations', JSON.stringify(stations)); // 刷新列表+提示 loadStations(); showMessage(document.getElementById('submit-message'), "已清空你的提交 | Your submissions cleared!", "success"); setTimeout(() => document.getElementById('submit-message').style.display = "none", 2000); } } // 通用提示消息函数 function showMessage(element, text, type) { element.textContent = text; element.className = `message ${type}`; } </script></body> </html>
+        /* 半透明遮罩，保证文字清晰 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+
+        .back {
+            margin-bottom: 20px;
+            display: inline-block;
+            color: #0066cc;
+            text-decoration: none;
+            position: relative;
+            z-index: 1;
+        }
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #666;
+            color: #2c3e50;
+            position: relative;
+            z-index: 1;
+        }
+        h1 .en {
+            font-size: 20px;
+            display: block;
+            margin-top: 5px;
+            font-weight: normal;
+            color: #666;
+        }
+
+        /* 统一h2样式 */
+        h2 {
+            font-size: 20px;
+            margin: 30px 0 15px;
+            color: #2c3e50;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        /* 提交表单样式 */
+        .submit-form {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 通用表单样式 */
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            resize: vertical;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+
+        /* 通用按钮样式 */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            color: #fff;
+        }
+        .btn-primary {
+            background: #3498db;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .btn-danger {
+            background: #e74c3c;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* 提示消息 */
+        .message {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        /* 核心：自动两列布局（适配所有列表） */
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 固定两列 */
+            gap: 10px; /* 列/行间距 */
+            position: relative;
+            z-index: 1;
+            margin: 0 auto;
+            max-width: 800px; /* 限制最大宽度，更美观 */
+        }
+
+        /* 用户提交的电台项样式 */
+        .station-item {
+            background: rgba(255,255,255,0.7);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: transform 0.2s ease;
+        }
+        .station-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .station-item strong {
+            font-size: 18px;
+            color: #222;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .station-item .info {
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .station-item .time {
+            font-size: 12px;
+            color: #999;
+            text-align: right;
+            display: block;
+        }
+        .station-item .owner {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* 静态呼号项样式 */
+        .callsign-item {
+            background: rgba(255,255,255,0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        /* 清空按钮（仅登录用户可见，且只能清空自己的） */
+        .clear-btn {
+            margin: 20px auto 0;
+            display: none; /* 默认隐藏 */
+            padding: 8px 20px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .clear-btn.show {
+            display: block; /* 有数据时显示 */
+        }
+        .clear-btn:hover {
+            background: #c0392b;
+        }
+
+        /* 说明文本样式 */
+        .note {
+            text-align: center;
+            margin: 20px 0 30px;
+            font-size: 14px;
+            color: #666;
+            position: relative;
+            z-index: 1;
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #666;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 手机端适配：小屏幕自动变回一列 */
+        @media (max-width: 600px) {
+            .two-col-grid {
+                grid-template-columns: 1fr; /* 手机端一列 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 返回主页按钮 -->
+    <a href="../" class="back">← 返回主页 | Back to Home</a>
+
+    <!-- 页面标题 -->
+    <h1>
+        最近泰安有发射的电台
+        <span class="en">Recently Active Stations in Tai'an</span>
+    </h1>
+    <h2>泰安在册电台呼号 | Registered Station Call Signs in Tai'an</h2>
+    <div class="two-col-grid">
+        <div class="callsign-item">BA4IHB</div>
+        <div class="callsign-item">BA4III</div>
+        <div class="callsign-item">BA4JAE</div>
+        <div class="callsign-item">BA4JBN</div>
+        <div class="callsign-item">BA4JBU</div>
+        <div class="callsign-item">BA4JFO</div>
+        <div class="callsign-item">BA4JFT</div>
+        <div class="callsign-item">BA4JFV</div>
+        <div class="callsign-item">BA4JGU</div>
+        <div class="callsign-item">BA4JIF</div>
+        <div class="callsign-item">BA4JNU</div>
+        <div class="callsign-item">BA4JUN</div>
+        <div class="callsign-item">BA4KJA</div>
+        <div class="callsign-item">BA4KNP</div>
+        <div class="callsign-item">BA4KNR</div>
+        <div class="callsign-item">BA4KOK</div>
+        <div class="callsign-item">BA4KVQ</div>
+        <div class="callsign-item">BA4KYT</div>
+        <div class="callsign-item">BD4JK</div>
+        <div class="callsign-item">BD4LG</div>
+        <div class="callsign-item">BD4NW</div>
+        <div class="callsign-item">BG4JPO</div>
+        <div class="callsign-item">BG4JUR</div>
+        <div class="callsign-item">BG4JUS</div>
+        <div class="callsign-item">BG4JUT</div>
+        <div class="callsign-item">BG4JUV</div>
+        <div class="callsign-item">BG4JUW</div>
+        <div class="callsign-item">BG4LZM</div>
+        <div class="callsign-item">BG4LZN</div>
+        <div class="callsign-item">BG4LZO</div>
+        <div class="callsign-item">BG4LZT</div>
+        <div class="callsign-item">BG4LZV</div>
+        <div class="callsign-item">BG4LZW</div>
+        <div class="callsign-item">BG4LZY</div>
+        <div class="callsign-item">BH4OBW</div>
+        <div class="callsign-item">BH4PXX</div>
+        <div class="callsign-item">BH4PZY</div>
+        <div class="callsign-item">BI4IWX</div>
+        <div class="callsign-item">BI4IXA</div>
+        <div class="callsign-item">BI4JKW</div>
+        <div class="callsign-item">BI4JWG</div>
+        <div class="callsign-item">BI4LHS</div>
+        <div class="callsign-item">BI4LQH</div>
+        <div class="callsign-item">BI4MBB</div>
+        <div class="callsign-item">BI4MCD</div>
+        <div class="callsign-item">BI4MCX</div>
+        <div class="callsign-item">BI4MPY</div>
+        <div class="callsign-item">BI4NCA</div>
+        <div class="callsign-item">BI4NDA</div>
+        <div class="callsign-item">BI4PID</div>
+        <div class="callsign-item">BI4PIH</div>
+        <div class="callsign-item">BI4PUM</div>
+    </div>
+
+    <!-- 用户提交表单区域 -->
+    
+    <!-- 说明文本 -->
+    <div class="note">
+        <p>注：列表实时更新，包含近期在泰安地区有发射记录的业余电台呼号，如有遗漏请发送电子邮件至watmham@outlook.com</p>
+        <p>最新更新日期：2026年8月15日</p>
+        <p class="en">Note: This list is updated in real time, including call signs of amateur stations with recent transmission records in Tai'an</p>
+    </div>
+
+    <!-- 版权声明 -->
+    <div class="copyright">
+        © 2026 WATM 通联泰安全模式奖 BG4LZN | 联系邮箱：<a href="mailto:watmham@outlook.com">watmham@outlook.com</a>
+    </div>
+
+    
+
+        // 通用提示消息函数
+        function showMessage(element, text, type) {
+            element.textContent = text;
+            element.className = `message ${type}`;
+        }
+
+        // 页面加载完毕执行
+        window.addEventListener('DOMContentLoaded', loadStations);
+    </script>
+</body>
+</html>
